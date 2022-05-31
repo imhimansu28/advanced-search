@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="Description" content="Enter your description here" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link rel="stylesheet" href="assets/style.css">
+  <title>Title</title>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row box" x-data="{
+        query:'',
+        results:[],
+
+        data_search(query){
+          fetch(`https://www.reddit.com/search.json?q=${query}`)
+          .then(response=>response.json())
+          .then(results => this.results = results.data.children.map(result => result.data))
+        },
+
+        init(){
+          this.$watch('query',(query)=>{
+            if (query ===''){
+              this.results = []
+              return 
+            }
+              this.data_search(query)
+          })
+        }
+
+      }">
+      <div class="form-group mx-5 mt-5">
+        <input type="text" placeholder="search here..." x-model.debounce.200="query" x-on:keyup.down="selectNext()"
+        x-on:keyup.up="selectPrevious()"
+        x-on:click.outside="reset()"
+        x-on:keyup.enter="selectResult()" class="form-control" id="helped-text">
+       
+        <p x-show="query.length" class="help-text small-text text-muted" >
+          Your Search for <span x-text="query" class="text-primary"></span> returned <span x-text="results.length" class="text-danger"></span> results
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-md-12 result">
+          <template x-for="result in results" key="result.kinds">
+            <div class="card mb-2 px-5">
+              <div class="card-body p-1">
+                <a x-bind:href="result.url" x-text="result.title"></a> <br>
+                <a class="small-text btn btn-default" x-bind:href="result.url" x-text="result.upvote_ratio"></a>
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.1/umd/popper.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/js/bootstrap.min.js"></script>
+  <script src="//unpkg.com/alpinejs" defer></script>
+</body>
+
+</html>
