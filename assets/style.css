@@ -6,27 +6,32 @@
     left:50%;
     position: absolute;
     transform: translateX(-50%);
-    width: 700px;
+    width: 600px;
     max-width: 100%;
 }
-.form-control{
-    width: 400px;
-    border: 0;
-    border-bottom: 2px solid rgb(1, 1, 53);
-    border-radius: 0;
-    background: #fafafa;
-    box-shadow: 1px 2px 4px #ccc;
-}
-.form-control:focus{
-    border: 0;
-    border-bottom: 2px solid rgb(180, 1, 10);
-    border-radius: 0;
-    background: #f2f2f2;
-    box-shadow: 1px 2px 4px #ccc;
-    transition: ease-in-out 400ms;
-}
-.form-control::placeholder{
-    color: #01063a;
-    text-transform: capitalize;
-    font-family: 'Montserrat', sans-serif;
+/* width */
+::-webkit-scrollbar {
+    width: 3px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: rgb(202, 201, 201);
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+
+.card{
+    border:#01063a2c solid 0px;
+    border-radius:4px;
+    box-shadow: rgb(243, 243, 255) 0px 0px 10px;
 }

@@ -23,18 +23,18 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row box d-flex justify-content-center" x-data="dropdownSearch()">
+    </div>(
+    <div class="row box d-flex justify-content-center" x-data="dropdownSearch()" >
         <div class="col-md-12">
             <input type="text"
                 class=" mt-5 rounded-md border  focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full px-4 py-2"
                 placeholder="Search" x-model="query" x-on:click.outside="reset()" x-on:keyup.escape="reset()"
-                x-on:keyup.down="selectNext()" x-on:keyup.up="selectPrevious()" x-on:keyup.enter="goUrl()">
+                x-on:keydown.arrow-down="selectNext()" x-on:keydown.arrow-up="selectPrevious()" x-on:keyup.enter="goUrl()">
 
             <div class="shadow-sm px-2 rounded-md py-2 border mt-1 max-h-64 overflow-y-auto bg-white"
                 x-show="results.length>0" x-transition.duration.500 x-ref="results">
-                <template x-for="result in results" key="result.kinds">
-                    <button x-text="result.title" class="px-4 py-2 block w-full text-left " :class="{'bg-gray-100 outline-none'}"
+                <template x-for="(result, index in results" key="result.kinds">
+                    <button x-text="result.title" class="px-4 py-2 block w-full text-left " :class="{'bg-gray-100 focus':index === selected}"
                         x-on:click.prevent="goUrl(result.url)"></button>
                 </template>
             </div>
@@ -82,7 +82,7 @@
                     this.selectedFocus();
                 },
                 selectPrevious() {
-                    if (this.selected === 0) {
+                    if (this.selected === "") {
                         this.selected = this.results.length - 1;
                     } else {
                         this.selected--;
@@ -92,11 +92,10 @@
                     }
                     this.selectedFocus();
                 },
-                // selectedFocus(){
-                //         this.$refs.results.children[this.selected].focus();
-                // },
                 selectedFocus(){
-                    this.$refs.results.children[this.selected].focus();
+                    this.$refs.results.children[this.selected].scrollIntoView({
+                        block: 'center',
+                    });
                 },
                 
                 goUrl() {
@@ -105,6 +104,7 @@
 
 
             }
+            console.log(dropdownSearch.selectedFocus())
         }
     </script>
 

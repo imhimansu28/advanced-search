@@ -34,7 +34,7 @@
             <div class="shadow-sm px-2 rounded-md py-2 border mt-1 max-h-64 overflow-y-auto bg-white"
                 x-show="results.length>0" x-transition.duration.500 x-ref="results">
                 <template x-for="result in results" key="result.kinds">
-                    <button x-text="result.title" class="px-4 py-2 block w-full text-left " :class="{'bg-gray-100 outline-none'}"
+                    <button x-text="result.title" class="px-4 py-2 block w-full text-left " :class="{'bg-gray-100 outline:none':result.kinds=='url'}"
                         x-on:click.prevent="goUrl(result.url)"></button>
                 </template>
             </div>
@@ -67,43 +67,24 @@
                         this.data_search(query)
                     })
                 },
+                
                 reset() {
-                    this.query=''
+                    this.query = ''
+                    this.results = []
                 },
-                selectNext() {
-                    if (this.selected === this.results.length - 1) {
-                        this.selected = 0;
-                    } else {
-                        this.selected++;
-                    }
-                    if(this.selected === this.results.length){
-                        this.selected = 0;
-                    }
-                    this.selectedFocus();
+
+                selectNextFocus() {
+                    this.selected = (this.selected + 1) % this.results.length
+                    this.$refs.results.children[this.selected].focus()
                 },
-                selectPrevious() {
-                    if (this.selected === 0) {
-                        this.selected = this.results.length - 1;
-                    } else {
-                        this.selected--;
-                    }
-                    if(this.selected < 0){
-                        this.selected = this.results.length - 1;
-                    }
-                    this.selectedFocus();
+                selectPreviousFocus() {
+                    this.selected = (this.selected - 1 + this.results.length) % this.results.length
+                    this.$refs.results.children[this.selected].focus()
                 },
-                // selectedFocus(){
-                //         this.$refs.results.children[this.selected].focus();
-                // },
-                selectedFocus(){
-                    this.$refs.results.children[this.selected].focus();
+                selectedResult() {
+                    return this.results.children[this.selected]
                 },
                 
-                goUrl() {
-                    window.location.href = this.results[this.selected].url
-                },
-
-
             }
         }
     </script>
