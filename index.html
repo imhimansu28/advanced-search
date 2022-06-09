@@ -23,19 +23,32 @@
                 </div>
             </div>
         </div>
-    </div>(
-    <div class="row box d-flex justify-content-center" x-data="dropdownSearch()" >
+    </div>
+    <div class="row box d-flex justify-content-center" x-data="dropdownSearch()">
         <div class="col-md-12">
-            <input type="text"
-                class=" mt-5 rounded-md border  focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 w-full px-4 py-2"
-                placeholder="Search" x-model="query" x-on:click.outside="reset()" x-on:keyup.escape="reset()"
-                x-on:keydown.arrow-down="selectNext()" x-on:keydown.arrow-up="selectPrevious()" x-on:keyup.enter="goUrl()">
+            <input type="text" 
+                class=" mt-5 rounded-md border   focus:border-indigo-300  w-full px-4 py-2"
+                placeholder="Search"
+                x-model="query" 
+                x-on:keyup.escape="reset()"
+                x-on:keyup.down="selectNext" 
+                x-on:keyup.up="selectPrevious" 
+                x-on:keyup.enter="goUrl()"
+                autofocus>
 
             <div class="shadow-sm px-2 rounded-md py-2 border mt-1 max-h-64 overflow-y-auto bg-white"
-                x-show="results.length>0" x-transition.duration.500 x-ref="results">
-                <template x-for="(result, index in results" key="result.kinds">
-                    <button x-text="result.title" class="px-4 py-2 block w-full text-left " :class="{'bg-gray-100 focus':index === selected}"
-                        x-on:click.prevent="goUrl(result.url)"></button>
+                x-show="results.length>0" 
+                x-transition.duration.500 
+                x-ref="results"
+                >
+                <template x-for="(result, index) in results" key="result.kinds">
+                <a
+                    x-bind:href="result.url"
+                    x-text="result.title"
+                    class="px-4 py-2 block w-full text-left"
+                    :class="{'bg-gray-100 outline-none':index === selected}"
+                    >
+                </a>
                 </template>
             </div>
             <p x-show="query.length" class="help-text small-text text-muted">
@@ -50,7 +63,7 @@
             return {
                 query: '',
                 results: [],
-                selected: 0,
+                selected: "",
 
                 data_search(query) {
                     fetch(`https://www.reddit.com/search.json?q=${query}`)
@@ -68,18 +81,20 @@
                     })
                 },
                 reset() {
-                    this.query=''
+                    this.query = '';
+                    this.results = [];
                 },
                 selectNext() {
-                    if (this.selected === this.results.length - 1) {
+                    if (this.selected === "") {
                         this.selected = 0;
                     } else {
                         this.selected++;
                     }
-                    if(this.selected === this.results.length){
+                    if (this.selected === this.results.length) {
                         this.selected = 0;
                     }
                     this.selectedFocus();
+                    onclick.preventDefault();
                 },
                 selectPrevious() {
                     if (this.selected === "") {
@@ -87,24 +102,24 @@
                     } else {
                         this.selected--;
                     }
-                    if(this.selected < 0){
+                    if (this.selected < 0) {
                         this.selected = this.results.length - 1;
                     }
                     this.selectedFocus();
+                    onclick.preventDefault();
                 },
-                selectedFocus(){
-                    this.$refs.results.children[this.selected].scrollIntoView({
-                        block: 'center',
+                selectedFocus() {
+                    this.$refs.results.children[this.selected+1].scrollIntoView({
+                        block: 'nearest',
                     });
                 },
-                
+
                 goUrl() {
                     window.location.href = this.results[this.selected].url
                 },
 
 
             }
-            console.log(dropdownSearch.selectedFocus())
         }
     </script>
 
