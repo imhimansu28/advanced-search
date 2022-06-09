@@ -17,7 +17,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1 class="display-3 text-center opacity-80">
+                    <h1 class="display-2  text-uppercase  text-center text-primary opacity-80">
                         Make a search engine using alpine js
                     </h1>
                 </div>
@@ -30,6 +30,7 @@
                 class=" mt-5 rounded-md border   focus:border-indigo-300  w-full px-4 py-2"
                 placeholder="Search"
                 x-model="query" 
+                x-on:click.outside="reset()"
                 x-on:keyup.escape="reset()"
                 x-on:keyup.down="selectNext" 
                 x-on:keyup.up="selectPrevious" 
@@ -42,13 +43,19 @@
                 x-ref="results"
                 >
                 <template x-for="(result, index) in results" key="result.kinds">
-                <a
-                    x-bind:href="result.url"
-                    x-text="result.title"
-                    class="px-4 py-2 block w-full text-left"
-                    :class="{'bg-gray-100 outline-none':index === selected}"
-                    >
-                </a>
+                    <div class="container-fluid m-0 p-0">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a
+                                x-bind:href="result.url"
+                                x-text="result.title"
+                                class="px-4 py-2 block w-full text-left hover:bg-sky-100"
+                                :class="{'bg-sky-300 outline-none':index === selected}"
+                                style="text-decoration: none;">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </template>
             </div>
             <p x-show="query.length" class="help-text small-text text-muted">
